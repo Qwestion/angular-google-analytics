@@ -1,6 +1,6 @@
 /**
  * Angular Google Analytics - Easy tracking for your AngularJS application
- * @version v1.1.8 - 2016-12-30
+ * @version v1.1.8 - 2017-01-26
  * @link http://github.com/revolunet/angular-google-analytics
  * @author Julien Bouquillon <julien@revolunet.com> (https://github.com/revolunet)
  * @contributors Julien Bouquillon (https://github.com/revolunet),Justin Saunders (https://github.com/justinsa),Chris Esplin (https://github.com/deltaepsilon),Adam Misiorny (https://github.com/adam187)
@@ -27,7 +27,6 @@
     .provider('Analytics', function () {
       var accounts,
           analyticsJS = true,
-          cookieConfig = 'auto', // DEPRECATED
           created = false,
           crossDomainLinker = false,
           crossLinkDomains,
@@ -118,12 +117,6 @@
 
       this.setPageEvent = function (name) {
         pageEvent = name;
-        return this;
-      };
-
-      /* DEPRECATED */
-      this.setCookieConfig = function (config) {
-        cookieConfig = config;
         return this;
       };
 
@@ -422,18 +415,6 @@
           }
         };
 
-        /* DEPRECATED */
-        this._createScriptTag = function () {
-          that._registerScriptTags();
-          that._registerTrackers();
-        };
-
-        /* DEPRECATED */
-        this._createAnalyticsScriptTag = function () {
-          that._registerScriptTags();
-          that._registerTrackers();
-        };
-
         this._registerScriptTags = function () {
           var document = $document[0],
               protocol = _getProtocol(),
@@ -527,21 +508,9 @@
               trackerObj.trackEcommerce = isPropertyDefined('trackEcommerce', trackerObj) ? trackerObj.trackEcommerce : ecommerce;
               trackerObj.trackEvent = isPropertyDefined('trackEvent', trackerObj) ? trackerObj.trackEvent : false;
 
-              // Logic to choose the account fields to be used.
-              // cookieConfig is being deprecated for a tracker specific property: fields.
               var fields = {};
               if (isPropertyDefined('fields', trackerObj)) {
                 fields = trackerObj.fields;
-              } else if (isPropertyDefined('cookieConfig', trackerObj)) {
-                if (angular.isString(trackerObj.cookieConfig)) {
-                  fields.cookieDomain = trackerObj.cookieConfig;
-                } else {
-                  fields = trackerObj.cookieConfig;
-                }
-              } else if (angular.isString(cookieConfig)) {
-                fields.cookieDomain = cookieConfig;
-              } else if (cookieConfig) {
-                fields = cookieConfig;
               }
               if (trackerObj.crossDomainLinker === true) {
                 fields.allowLinker = true;
@@ -1167,29 +1136,6 @@
             trackUrlParams: trackUrlParams
           },
           getUrl: getUrl,
-          /* DEPRECATED */
-          setCookieConfig: function (config) {
-            that._log('warn', 'DEPRECATION WARNING: setCookieConfig method is deprecated. Please use tracker fields instead.');
-            return that._setCookieConfig.apply(that, arguments);
-          },
-          /* DEPRECATED */
-          getCookieConfig: function () {
-            that._log('warn', 'DEPRECATION WARNING: getCookieConfig method is deprecated. Please use tracker fields instead.');
-            return cookieConfig;
-          },
-          /* DEPRECATED */
-          createAnalyticsScriptTag: function (config) {
-            that._log('warn', 'DEPRECATION WARNING: createAnalyticsScriptTag method is deprecated. Please use registerScriptTags and registerTrackers methods instead.');
-            if (config) {
-              cookieConfig = config;
-            }
-            return that._createAnalyticsScriptTag();
-          },
-          /* DEPRECATED */
-          createScriptTag: function () {
-            that._log('warn', 'DEPRECATION WARNING: createScriptTag method is deprecated. Please use registerScriptTags and registerTrackers methods instead.');
-            return that._createScriptTag();
-          },
           registerScriptTags: function () {
             return that._registerScriptTags();
           },
