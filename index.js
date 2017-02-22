@@ -429,7 +429,7 @@
           //
           if (analyticsJS === true) {
             //scriptSource = protocol + '//www.google-analytics.com/' + (debugMode ? 'analytics_debug.js' : 'analytics.js');
-            scriptSource = '/assets/js/aga_init.js';
+            scriptSource = '/assets/js/libs/aga_init.js';
             if (testMode !== true) {
               // If not in test mode inject the Google Analytics tag
               (function (i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function (){
